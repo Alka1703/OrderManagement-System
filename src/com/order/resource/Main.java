@@ -15,8 +15,8 @@ public class Main {
 		} catch (UserNotFoundException e) {
 			e.printStackTrace();
 		}
-		//User user1= new User(907, "rashmi_prasad@persistent.com", "rashmi@123", 989788987, "kolkata","Rashmi Prasad");
-		//new DataFetch().addUser(user1);
+		User user1= new User(908, "rashmi_prasad@persistent.com", "rashmi@123", 989788987, "kolkata","Rashmi Prasad");
+		new DataFetch().addUser(user1);
 		Product product= new Product();
 		try {
 			product= new DataFetch().getProduct(1);
