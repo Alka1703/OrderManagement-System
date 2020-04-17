@@ -1,7 +1,10 @@
 package com.order.resource;
 
+import com.order.bean.Cart;
+import com.order.bean.Order;
 import com.order.bean.Product;
 import com.order.bean.User;
+import com.order.bean.Wishlist;
 import com.order.exception.ProductNotFoundException;
 import com.order.exception.UserNotFoundException;
 import com.order.util.DataFetch;
@@ -22,9 +25,19 @@ public class Main {
 			product= new DataFetch().getProduct(1);
 			System.out.println(product);
 		} catch (ProductNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Order order= new Order();
+		order=new DataFetch().fetchOrderDetails(502);
+		System.out.println(order);
+		
+		Wishlist wishlist= new Wishlist();
+		wishlist= new DataFetch().fetchWishlist(901);
+		System.out.println(wishlist);
+		
+		Cart cart= new Cart();
+		cart= new DataFetch().fetchCartDetails(907);
+		System.out.println(cart);
 		
 	}
 

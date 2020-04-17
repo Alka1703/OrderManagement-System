@@ -6,6 +6,10 @@ public class Cart {
 	private int cartId;
 	private Set<Product> item;
 	private User user;
+	
+	public Cart() {
+		super();
+	}
 	public Cart(int cartId, Set<Product> item, User user) {
 		super();
 		this.cartId=cartId;

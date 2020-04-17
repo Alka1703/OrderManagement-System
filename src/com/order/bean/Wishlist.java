@@ -7,6 +7,9 @@ public class Wishlist {
 	private User wishedBy;
 	private Set<Product> wishes;
 	
+	public Wishlist() {
+		super();
+	}
 	public Wishlist(int wishlistId, User wishedBy, Set<Product> wishes) {
 		super();
 		this.wishlistId = wishlistId;
@@ -30,5 +33,9 @@ public class Wishlist {
 	}
 	public void setWishes(Set<Product> wishes) {
 		this.wishes = wishes;
+	}
+	@Override
+	public String toString() {
+		return "Wishlist [wishlistId=" + wishlistId + ", wishedBy=" + wishedBy + ", wishes=" + wishes + "]";
 	}
 }

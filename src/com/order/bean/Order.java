@@ -10,6 +10,9 @@ public class Order {
 	private User orderedBy;
 	private OrderStatus status;
 	private Set<Product> cart;
+	public Order() {
+		
+	}
 	public Order(int orderId, String number, Date orderedOn, User orderedBy, OrderStatus status, Set<Product> cart) {
 		super();
 		this.orderId = orderId;
