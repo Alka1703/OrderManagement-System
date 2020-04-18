@@ -81,23 +81,23 @@ public class DataFetch {
 	
 //Funciton to check user login :
 	public boolean CheckLogin(String email, String pass) {
+		boolean flag= false;
 		String Select_sql="select * from user where email='"+email+"' and password='"+pass+"'";
 		try
 		{
-			ConnectionFactory con=new ConnectionFactory();
-			cn=con.getConn();
-			st=cn.prepareStatement(Select_sql);
-			rs=st.executeQuery(Select_sql);
-			if (rs.next())
+			DatabaseConnection dbcon=new DatabaseConnection();
+			Connection con=dbcon.createConnection();
+			Statement statament=con.prepareStatement(Select_sql);
+			ResultSet resultSet=statament.executeQuery(Select_sql);
+			if (resultSet.next())
 			{
 				System.out.println("Correct");
-				response.redirect("afterLogin.html");
+				flag = true;
 			}
 			else
 			{
 				System.out.println("incorrect");
-				response.redirect("login.html");
-				flag=false;
+				flag = false;
 			}
 		}
 		catch(SQLException sqe)
