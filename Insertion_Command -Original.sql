@@ -5,6 +5,8 @@ insert into user(userid, email, password, address, name, phone) values (904, "pr
 insert into user(userid, email, password, address, name, phone) values (905, "aniruddh_kotecha@persistent.com", "aniruddh123", "kolkata", "Aniruddh Kotecha", 797680089);
 insert into user(userid, email, password, address, name, phone) values (906, "pulkit_vatsal@persistent.com", "pulkit123", "kolkata", "Pulkit Vatsal",980969075);
 
+
+
 insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(1,"A001","Spoon","Stainless steel", 80, "HOME_AND_KITCHEN");
 insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(2,"A002","Milk boiler","Stainless steel item", 300, "HOME_AND_KITCHEN");
 insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(3,"A003","Belan","Wooden, slim", 80, "HOME_AND_KITCHEN");
@@ -53,6 +55,8 @@ insert into product(ProductId, ProductCode, Name, Description, Price, Category) 
 insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(039,"H039","Room Freshner Spray","Godrej Aer Fresh", 150, "HOUSEHOLD_ITEMS");
 insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(040,"H040","Mosquito Killer Spray","Baygon Fly Lime Scent", 240, "HOUSEHOLD_ITEMS");
 
+
+
 insert into orders(orderid, orderNum,orderedOn,orderedBy,status) values(501,'OD124719220','2020-01-26', 901,"CONFIRMED");
 insert into orders(orderid, orderNum,orderedOn,orderedBy,status) values(502, 'OD119215410','2020-02-14', 902,"PACKED");
 insert into orders(orderid, orderNum,orderedOn,orderedBy,status) values(503, 'OD119215340','2020-03-23', 903, "BILLED");
@@ -60,8 +64,58 @@ insert into orders(orderid, orderNum,orderedOn,orderedBy,status) values(504, 'OD
 
 
 
+insert into wishlist(wishListId, wishedBy) values(1001, 1);
+insert into wishlist(wishListId, wishedBy) values(1002, 2);
+insert into wishlist(wishListId, wishedBy) values(1003, 3);
+insert into wishlist(wishListId, wishedBy) values(1004, 4);
 
 
+
+insert into wishes(wishListId,ProductId) values(1001,2);
+insert into wishes(wishListId,ProductId) values(1001,5);
+insert into wishes(wishListId,ProductId) values(1002,3);
+insert into wishes(wishListId,ProductId) values(1002,10);
+insert into wishes(wishListId,ProductId) values(1002,15);
+insert into wishes(wishListId,ProductId) values(1003,11);
+insert into wishes(wishListId,ProductId) values(1003,9);
+insert into wishes(wishListId,ProductId) values(1003,6);
+insert into wishes(wishListId,ProductId) values(1004,14);
+insert into wishes(wishListId,ProductId) values(1004,13);
+
+
+
+insert into items(orderId,ProductId) values(501,6);
+insert into items(orderId,ProductId) values(501,3);
+insert into items(orderId,ProductId) values(501,2);
+insert into items(orderId,ProductId) values(502,8);
+insert into items(orderId,ProductId) values(502,2);
+insert into items(orderId,ProductId) values(502,8);
+insert into items(orderId,ProductId) values(502,7);
+insert into items(orderId,ProductId) values(503,4);
+insert into items(orderId,ProductId) values(503,5);
+insert into items(orderId,ProductId) values(503,3);
+insert into items(orderId,ProductId) values(504,7);
+insert into items(orderId,ProductId) values(504,8);
+
+
+
+insert into cart(CartId, UserId) values(307,907);
+insert into cart(CartId, UserId) values(305,905);
+insert into cart(CartId, UserId) values(306,906);
+insert into cart(CartId, UserId) values(304,904);
+
+
+
+insert into cart_items(CartId, ProductId) values (304,5);
+insert into cart_items(CartId, ProductId) values (304,15);
+insert into cart_items(CartId, ProductId) values (304,10);
+insert into cart_items(CartId, ProductId) values (305,4);
+insert into cart_items(CartId, ProductId) values (305,1);
+insert into cart_items(CartId, ProductId) values (306,5);
+insert into cart_items(CartId, ProductId) values (306,8);
+insert into cart_items(CartId, ProductId) values (306,9);
+insert into cart_items(CartId, ProductId) values (307,11);
+insert into cart_items(CartId, ProductId) values (307,14);
 
 
 

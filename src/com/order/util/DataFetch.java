@@ -84,10 +84,10 @@ public class DataFetch {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		throw new UserNotFoundException(new ExceptionMessage(String.format("%d not found", userId)));
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
 	}
 	
-//Function to register a new user to the database
+	//Function to register a new user to the database
 	
 	public void addUser(User user){
 		try {
@@ -101,6 +101,79 @@ public class DataFetch {
 		}
 		
 	}
+	
+	public void deleteUser(int userId) throws UserNotFoundException{
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Delete from user where userId = '%d' ", userId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
+	}
+	public void updateUserEmail(int userId, String email) throws UserNotFoundException {
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Update  user set email = '%s' where userId = '%d'", email, userId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
+
+	}
+	
+	public void updateUserPhone(int userId, int phone) throws UserNotFoundException {
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Update  user set phone = '%d' where userId = '%d'", phone, userId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
+	}
+	
+	public void updateUserAddress(int userId, String address) throws UserNotFoundException {
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Update  user set address = '%s' where userId = '%d'", address, userId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
+	}
+	
+	public void updateUserPassword(int userId, String password) throws UserNotFoundException {
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Update  user set password = '%s' where userId = '%d'", password, userId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
+	}
+	
+	public void updateUserName(int userId, String name) throws UserNotFoundException {
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Update  user set name = '%s' where userId = '%d'", name, userId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
+	}
+	
 //============================================================================================================================================================================
 //*************************************************** USER	*******************************************************************************************************************
 //=============================================================================================================================================================================	
@@ -134,7 +207,7 @@ public class DataFetch {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with code %s not found", productId)));
+		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
 	}
 
 //Function to add the given product in the product table in the database
@@ -160,7 +233,7 @@ public class DataFetch {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with code %s not found", productId)));
+		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
 		
 	}
 	public void updateProductPrice(int productId, int price) throws ProductNotFoundException{
@@ -173,8 +246,11 @@ public class DataFetch {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
+
 	}
+	
+	
 	
 //============================================================================================================================================================================
 //*************************************************** PRODUCT ******************************************************************************************************************

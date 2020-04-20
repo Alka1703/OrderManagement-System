@@ -27,22 +27,21 @@ public class Main {
 		} catch (ProductNotFoundException e) {
 			e.printStackTrace();
 		}
-		Order order= new Order();
-		order=new DataFetch().fetchOrderDetails(502);
-		System.out.println(order);
-		
-		Wishlist wishlist= new Wishlist();
-		wishlist= new DataFetch().fetchWishlist(901);
-		System.out.println(wishlist);
-		
-		Cart cart= new Cart();
-		cart= new DataFetch().fetchCartDetails(907);
-		System.out.println(cart);
-		
-		//new DataFetch().addProductInCart(4, 905);
-		//new DataFetch().addProductInWishList(7, 902);
-		//new DataFetch().deleteProductFromCart(4, 905);
-		new DataFetch().deleteProductFromWishList(7, 902);
+		/*
+		 * Order order= new Order(); order=new DataFetch().fetchOrderDetails(502);
+		 * System.out.println(order);
+		 * 
+		 * Wishlist wishlist= new Wishlist(); wishlist= new
+		 * DataFetch().fetchWishlist(901); System.out.println(wishlist);
+		 * 
+		 * Cart cart= new Cart(); cart= new DataFetch().fetchCartDetails(907);
+		 * System.out.println(cart);
+		 * 
+		 * //new DataFetch().addProductInCart(4, 905); //new
+		 * DataFetch().addProductInWishList(7, 902); //new
+		 * DataFetch().deleteProductFromCart(4, 905); new
+		 * DataFetch().deleteProductFromWishList(7, 902);
+		 */
 	}
 
 }
