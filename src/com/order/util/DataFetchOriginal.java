@@ -101,6 +101,38 @@ public class DataFetchOriginal {
 		}
 		
 	}
+<<<<<<< HEAD:src/com/order/util/DataFetchOriginal.java
+=======
+	
+	
+//Funciton to check user login :
+	public boolean CheckLogin(String email, String pass) {
+		boolean flag= false;
+		String Select_sql="select * from user where email='"+email+"' and password='"+pass+"'";
+		try
+		{
+			DatabaseConnection dbcon=new DatabaseConnection();
+			Connection con=dbcon.createConnection();
+			Statement statament=con.prepareStatement(Select_sql);
+			ResultSet resultSet=statament.executeQuery(Select_sql);
+			if (resultSet.next())
+			{
+				System.out.println("Correct");
+				flag = true;
+			}
+			else
+			{
+				System.out.println("incorrect");
+				flag = false;
+			}
+		}
+		catch(SQLException sqe)
+		{
+			sqe.printStackTrace();
+		}
+		return flag;
+	}	
+>>>>>>> 1d10f249e289a385c2bd7919e01e4ce9a9bce825:DataFetch.java
 //============================================================================================================================================================================
 //*************************************************** USER	*******************************************************************************************************************
 //=============================================================================================================================================================================	

@@ -31,6 +31,30 @@ insert into product(ProductId, ProductCode, Name, Description, Price, Category) 
 insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(19,"C019","butter","Amul", 20, "BREAKFAST_AND_DAIRY");
 insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(20,"C020","cheese","Amul", 14, "BREAKFAST_AND_DAIRY");
 
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(021,"E021","Wheat Flour","Aashirvaad", 45, "GROCERY_AND_STAPLES");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(022,"E022","Rice","India Gate", 100, "GROCERY_AND_STAPLES");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(023,"E023","Soya Chunks","Mother's Choice", 220, "GROCERY_AND_STAPLES");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(024,"E024","Soya Bean Refined Oil","Fortune", 130, "GROCERY_AND_STAPLES");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(025,"E025","Toor Dal","Tata Sampann", 150, "GROCERY_AND_STAPLES");
+
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(026,"F026","Onions","Fresho", 23, "VEGETABLES_AND_FRUITS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(027,"F027","Cherry Tomato","Fresho", 375, "VEGETABLES_AND_FRUITS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(028,"F028","Banana","Fresho", 40, "VEGETABLES_AND_FRUITS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(029,"F029","Musk Melon","Fresho", 35, "VEGETABLES_AND_FRUITS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(030,"F030","Broccoli","Fresho", 200, "VEGETABLES_AND_FRUITS");
+
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(031,"G031","Cocoa Body Lotion","Nivea", 940, "PERSONAL_CARE");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(032,"G032","Shampoo","Sunsilk Thick and Long", 640, "PERSONAL_CARE");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(033,"G033","Face Wash","Everyuth Tulsi Turmeric", 130, "PERSONAL_CARE");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(034,"G034","Lip Balm","Nivea Cherry Shine", 940, "PERSONAL_CARE");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(035,"G035","Deodrant","Fogg Napolean Men's", 940, "PERSONAL_CARE");
+
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(036,"H036","Detergent Powder","Ariel Complete", 145, "HOUSEHOLD_ITEMS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(037,"H037","Liquid Detergent","Ezee", 180, "HOUSEHOLD_ITEMS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(038,"H038","Toilet Cleaner","Harpic Power Plus", 180, "HOUSEHOLD_ITEMS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(039,"H039","Room Freshner Spray","Godrej Aer Fresh", 150, "HOUSEHOLD_ITEMS");
+insert into product(ProductId, ProductCode, Name, Description, Price, Category) values(040,"H040","Mosquito Killer Spray","Baygon Fly Lime Scent", 240, "HOUSEHOLD_ITEMS");
+
 
 
 insert into orders(orderid, orderNum,orderedOn,orderedBy,status) values(501,'OD124719220','2020-01-26', 901,"CONFIRMED");
