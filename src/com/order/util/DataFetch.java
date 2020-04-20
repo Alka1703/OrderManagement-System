@@ -7,9 +7,6 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
-
-import javax.ws.rs.core.Response.Status;
-
 import com.order.bean.Cart;
 import com.order.bean.Category;
 import com.order.bean.Order;
@@ -32,6 +29,34 @@ public class DataFetch {
 				e.printStackTrace();
 			}
 	}
+	
+
+	public boolean CheckLogin(String email, String pass) {
+		boolean flag= false;
+		String Select_sql="select * from user where email='"+email+"' and password='"+pass+"'";
+		try
+		{
+			DatabaseConnection dbcon=new DatabaseConnection();
+			Connection con=dbcon.createConnection();
+			Statement statament=con.prepareStatement(Select_sql);
+			ResultSet resultSet=statament.executeQuery(Select_sql);
+			if (resultSet.next())
+			{
+				System.out.println("Correct");
+				flag = true;
+			}
+			else
+			{
+				System.out.println("incorrect");
+				flag = false;
+			}
+		}
+		catch(SQLException sqe)
+		{
+			sqe.printStackTrace();
+		}
+		return flag;
+	}	
 //============================================================================================================================================================================
 //*************************************************** USER	*******************************************************************************************************************
 //=============================================================================================================================================================================	
@@ -59,7 +84,6 @@ public class DataFetch {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		throw new UserNotFoundException(new ExceptionMessage(String.format("%d not found", userId)));
 	}
 	
@@ -118,7 +142,7 @@ public class DataFetch {
 	public void addProduct(Product product){
 		try {
 			statement= connection.createStatement();
-			String sql;
+			String sql; 
 			sql=String.format("Insert into product values('%d','%s', '%s','%s', '%d','%s')",
 								product.getProductId(),product.getCode(),product.getName(), product.getDescription(), product.getPrice(), product.getCategory());
 			statement.execute(sql);	
@@ -127,226 +151,34 @@ public class DataFetch {
 		}
 	}
 	
-//============================================================================================================================================================================
-//*************************************************** PRODUCT ******************************************************************************************************************
-//=============================================================================================================================================================================	
-
-	
-	
-//============================================================================================================================================================================
-//*************************************************** ORDER ******************************************************************************************************************
-//=============================================================================================================================================================================	
-	
-	public void placeOrder(Order order) {
+	public void deleteProduct(int productId) throws ProductNotFoundException{
 		try {
 			statement= connection.createStatement();
 			String sql;
-			sql=String.format("Insert into 'order' values('%d','%s','%s','%d','%s')", 
-								order.getOrderId(), order.getNumber(),order.getOrderedOn(),order.getOrderedBy().getId(),order.getStatus());
+			sql= String.format("Delete from product where productId = '%d' ", productId);
 			statement.execute(sql);
-			for(Product p: order.getCart()) {
-				sql=String.format("Insert into items values('%d','%d')",order.getOrderId(), p.getProductId());
-				statement.execute(sql);
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with code %s not found", productId)));
+		
 	}
-	
-	public Order fetchOrderDetails(int orderId) {
-		Order order= new Order();
+	public void updateProductPrice(int productId, int price) throws ProductNotFoundException{
 		try {
-			statement=connection.createStatement();
+			statement= connection.createStatement();
 			String sql;
-			sql=String.format("Select * from orders WHERE orderId= '%d'",orderId);
-			ResultSet resultSet;
-			resultSet=statement.executeQuery(sql);
-			int userId=0;
-			if(resultSet.next()) {
-				order.setOrderId(resultSet.getInt("orderId"));
-				order.setNumber(resultSet.getString("orderNum"));
-				order.setOrderedOn(resultSet.getDate("orderedOn"));
-				order.setStatus(OrderStatus.valueOf(resultSet.getString("status")));
-				userId= resultSet.getInt("OrderedBy");
-			}
-			sql= String.format("Select * from user WHERE userId= '%d' ",(userId));
-			resultSet= statement.executeQuery(sql);
-			User user= new User();
-			if(resultSet.next()){
-				user.setId(resultSet.getInt("userid"));
-				user.setName(resultSet.getString("name"));
-				user.setEmail(resultSet.getString("Email"));
-				user.setAddress(resultSet.getString("Address"));
-				user.setPhone(resultSet.getInt("Phone"));
-				user.setPassword(resultSet.getString("Password"));
-			}
-			order.setOrderedBy(user);
-			sql = String.format("Select ProductId from items WHERE orderId = '%d'",(order.getOrderId()));
-			resultSet=statement.executeQuery(sql);
-			Set<Product>pr= new HashSet<Product>();
-			Vector<Integer>temp=  new Vector<Integer>();
-			while(resultSet.next()) {
-				temp.add(resultSet.getInt("ProductId"));
-			}
-			for(int t:temp) {
-				Product product= new Product();
-				sql=String.format("SELECT * FROM product WHERE ProductId = '%d'", t);
-				resultSet= statement.executeQuery(sql);
-				if(resultSet.next()) {
-					product.setProductId(resultSet.getInt("ProductId"));
-					product.setCode(resultSet.getString("ProductCode"));
-					product.setDescription(resultSet.getString("Description"));
-					product.setName(resultSet.getString("Name"));
-					product.setPrice(resultSet.getInt("Price"));
-					product.setCategory(Category.valueOf(resultSet.getString("Category")));
-				}
-				pr.add(product);
-			}
-			order.setCart(pr);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return order;
-	}
-	
-//============================================================================================================================================================================
-//**************************************************************** ORDER ******************************************************************************************************************
-//=============================================================================================================================================================================	
-	
-
-	
-//============================================================================================================================================================================
-//**************************************************************** WISHLIST ******************************************************************************************************************
-//=============================================================================================================================================================================	
-
-	///incomplete function
-	public void addWishlist(Wishlist wishlist) {
-		try {
-			statement=connection.createStatement();
+			sql= String.format("Update product set price = '%d' where productId = '%d'", price, productId);
+			statement.execute(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//String sql=String.format("Insert into wishlist values", args) 
 		
-	}
-	
-	public Wishlist fetchWishlist(int userId) {
-		Wishlist wishlist= new Wishlist();
-		try {
-			statement= connection.createStatement();
-			String sql;
-			sql=String.format("Select * from wishlist WHERE WishedBy= '%d'",userId);
-			ResultSet resultSet= statement.executeQuery(sql);
-			if(resultSet.next()) 
-				wishlist.setWishlistId(resultSet.getInt("WishlistId"));
-			sql= String.format("Select * from user WHERE userId= '%d' ",(userId));
-			resultSet= statement.executeQuery(sql);
-			User user= new User();
-			if(resultSet.next()){
-				user.setId(resultSet.getInt("userid"));
-				user.setName(resultSet.getString("name"));
-				user.setEmail(resultSet.getString("Email"));
-				user.setAddress(resultSet.getString("Address"));
-				user.setPhone(resultSet.getInt("Phone"));
-				user.setPassword(resultSet.getString("Password"));
-			}
-			wishlist.setWishedBy(user);
-			sql = String.format("Select ProductId from wishes WHERE WishlistId = '%d'",(wishlist.getWishlistId()));
-			resultSet=statement.executeQuery(sql);
-			Set<Product>pr= new HashSet<Product>();
-			Vector<Integer>temp=  new Vector<Integer>();
-			while(resultSet.next()) {
-				temp.add(resultSet.getInt("ProductId"));
-			}
-			for(int t:temp) {
-				Product product= new Product();
-				sql=String.format("SELECT * FROM product WHERE ProductId = '%d'", t);
-				resultSet= statement.executeQuery(sql);
-				if(resultSet.next()) {
-					product.setProductId(resultSet.getInt("ProductId"));
-					product.setCode(resultSet.getString("ProductCode"));
-					product.setDescription(resultSet.getString("Description"));
-					product.setName(resultSet.getString("Name"));
-					product.setPrice(resultSet.getInt("Price"));
-					product.setCategory(Category.valueOf(resultSet.getString("Category")));
-				}
-				pr.add(product);
-			}
-			wishlist.setWishes(pr);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return wishlist;
 	}
 	
 //============================================================================================================================================================================
-//**************************************************************** WISHLIST ******************************************************************************************************************
+//*************************************************** PRODUCT ******************************************************************************************************************
 //=============================================================================================================================================================================	
 
+}	
 	
-//============================================================================================================================================================================
-//**************************************************************** CART ******************************************************************************************************************
-//=============================================================================================================================================================================	
-
-	public Cart fetchCartDetails(int userId) {
-		Cart cart = new Cart();
-		try {
-			statement= connection.createStatement();
-			String sql;
-			sql=String.format("Select * from cart WHERE UserId= '%d'",userId);
-			ResultSet resultSet= statement.executeQuery(sql);
-			if(resultSet.next()) 
-				cart.setCartId(resultSet.getInt("CartId"));
-			sql= String.format("Select * from user WHERE userId= '%d' ",(userId));
-			resultSet= statement.executeQuery(sql);
-			User user= new User();
-			if(resultSet.next()){
-				user.setId(resultSet.getInt("userid"));
-				user.setName(resultSet.getString("name"));
-				user.setEmail(resultSet.getString("Email"));
-				user.setAddress(resultSet.getString("Address"));
-				user.setPhone(resultSet.getInt("Phone"));
-				user.setPassword(resultSet.getString("Password"));
-			}
-			cart.setUser(user);
-			sql = String.format("Select ProductId from cart_items WHERE cartId = '%d'",(cart.getCartId()));
-			resultSet=statement.executeQuery(sql);
-			Set<Product>pr= new HashSet<Product>();
-			Vector<Integer>temp=  new Vector<Integer>();
-			while(resultSet.next()) {
-				temp.add(resultSet.getInt("ProductId"));
-			}
-			for(int t:temp) {
-				Product product= new Product();
-				sql=String.format("SELECT * FROM product WHERE ProductId = '%d'", t);
-				resultSet= statement.executeQuery(sql);
-				if(resultSet.next()) {
-					product.setProductId(resultSet.getInt("ProductId"));
-					product.setCode(resultSet.getString("ProductCode"));
-					product.setDescription(resultSet.getString("Description"));
-					product.setName(resultSet.getString("Name"));
-					product.setPrice(resultSet.getInt("Price"));
-					product.setCategory(Category.valueOf(resultSet.getString("Category")));
-				}
-				pr.add(product);
-			}
-			cart.setItem(pr);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return cart;
-		
-	}
-}
-
-
-
-
-
-

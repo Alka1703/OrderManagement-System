@@ -10,6 +10,9 @@ public class Order {
 	private User orderedBy;
 	private OrderStatus status;
 	private Set<Product> cart;
+	private int totalAmount;
+	
+	
 	public Order() {
 		
 	}
@@ -64,5 +67,14 @@ public class Order {
 	}
 	public void setCart(Set<Product> cart) {
 		this.cart = cart;
+	}
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(int totalAmount) {
+		int amount=0;
+		for(Product p : cart)
+			amount=amount + p.getPrice();
+		this.totalAmount = amount;
 	}
 }

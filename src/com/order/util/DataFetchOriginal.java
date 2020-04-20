@@ -7,9 +7,6 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
-
-import javax.ws.rs.core.Response.Status;
-
 import com.order.bean.Cart;
 import com.order.bean.Category;
 import com.order.bean.Order;
@@ -21,7 +18,7 @@ import com.order.exception.ExceptionMessage;
 import com.order.exception.ProductNotFoundException;
 import com.order.exception.UserNotFoundException;
 
-public class DataFetch {
+public class DataFetchOriginal {
 	static Connection connection;
 	Statement statement;
 	static {
@@ -32,6 +29,34 @@ public class DataFetch {
 				e.printStackTrace();
 			}
 	}
+	
+
+	public boolean CheckLogin(String email, String pass) {
+		boolean flag= false;
+		String Select_sql="select * from user where email='"+email+"' and password='"+pass+"'";
+		try
+		{
+			DatabaseConnection dbcon=new DatabaseConnection();
+			Connection con=dbcon.createConnection();
+			Statement statament=con.prepareStatement(Select_sql);
+			ResultSet resultSet=statament.executeQuery(Select_sql);
+			if (resultSet.next())
+			{
+				System.out.println("Correct");
+				flag = true;
+			}
+			else
+			{
+				System.out.println("incorrect");
+				flag = false;
+			}
+		}
+		catch(SQLException sqe)
+		{
+			sqe.printStackTrace();
+		}
+		return flag;
+	}	
 //============================================================================================================================================================================
 //*************************************************** USER	*******************************************************************************************************************
 //=============================================================================================================================================================================	
@@ -59,7 +84,6 @@ public class DataFetch {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		throw new UserNotFoundException(new ExceptionMessage(String.format("%d not found", userId)));
 	}
 	
@@ -77,35 +101,6 @@ public class DataFetch {
 		}
 		
 	}
-	
-	
-//Funciton to check user login :
-	public boolean CheckLogin(String email, String pass) {
-		String Select_sql="select * from user where email='"+email+"' and password='"+pass+"'";
-		try
-		{
-			ConnectionFactory con=new ConnectionFactory();
-			cn=con.getConn();
-			st=cn.prepareStatement(Select_sql);
-			rs=st.executeQuery(Select_sql);
-			if (rs.next())
-			{
-				System.out.println("Correct");
-				response.redirect("afterLogin.html");
-			}
-			else
-			{
-				System.out.println("incorrect");
-				response.redirect("login.html");
-				flag=false;
-			}
-		}
-		catch(SQLException sqe)
-		{
-			sqe.printStackTrace();
-		}
-		return flag;
-	}	
 //============================================================================================================================================================================
 //*************************************************** USER	*******************************************************************************************************************
 //=============================================================================================================================================================================	
@@ -181,7 +176,6 @@ public class DataFetch {
 			e.printStackTrace();
 		}
 	}
-	
 	public Order fetchOrderDetails(int orderId) {
 		Order order= new Order();
 		try {
@@ -231,13 +225,13 @@ public class DataFetch {
 				}
 				pr.add(product);
 			}
-			order.setCart(pr);
-			
+			order.setCart(pr);	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return order;
 	}
+	
 	
 //============================================================================================================================================================================
 //**************************************************************** ORDER ******************************************************************************************************************
@@ -252,13 +246,17 @@ public class DataFetch {
 	///incomplete function
 	public void addWishlist(Wishlist wishlist) {
 		try {
-			statement=connection.createStatement();
+			statement= connection.createStatement();
+			String sql;
+			sql=String.format("Insert into wishlist values ('%d', '%d')",wishlist.getWishlistId(), wishlist.getWishedBy().getId());
+			statement.execute(sql);
+			for(Product p: wishlist.getWishes()) {
+				sql=String.format("Insert into wishes values('%d','%d')",wishlist.getWishlistId(), p.getProductId());
+				statement.execute(sql);
+			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//String sql=String.format("Insert into wishlist values", args) 
-		
 	}
 	
 	public Wishlist fetchWishlist(int userId) {
@@ -303,15 +301,43 @@ public class DataFetch {
 				}
 				pr.add(product);
 			}
-			wishlist.setWishes(pr);
-			
+			wishlist.setWishes(pr);	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return wishlist;
 	}
 	
+	public void addProductInWishList(int productId, int userId) {	
+		try {
+			statement=connection.createStatement();
+			String sql;int wishlistId=0;
+			sql= String.format("Select wishlistId from wishlist where WishedBy= '%d'", userId);
+			ResultSet resultSet= statement.executeQuery(sql);
+			if(resultSet.next())
+				wishlistId=resultSet.getInt("wishlistId");
+			sql=String.format("Insert into wishes values ('%d', '%d')", wishlistId, productId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteProductFromWishList(int productId, int userId) {	
+		try {
+			statement=connection.createStatement();
+			String sql;
+			int wishlistId=0;
+			sql= String.format("Select wishlistId from wishlist where WishedBy= '%d'", userId);
+			ResultSet resultSet= statement.executeQuery(sql);
+			if(resultSet.next())
+				wishlistId=resultSet.getInt("wishlistId");
+			sql=String.format("delete from wishes where wishlistId = '%d' and productId = '%d'", wishlistId, productId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 //============================================================================================================================================================================
 //**************************************************************** WISHLIST ******************************************************************************************************************
 //=============================================================================================================================================================================	
@@ -363,15 +389,64 @@ public class DataFetch {
 				}
 				pr.add(product);
 			}
-			cart.setItem(pr);
-			
+			cart.setItem(pr);	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return cart;
+		return cart;	
+	}
+	
+	public void createCart(Cart cart) {
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql=String.format("Insert into cart values ('%d', '%d')",cart.getCartId(), cart.getUser().getId());
+			statement.execute(sql);
+			for(Product p: cart.getItem()) {
+				sql=String.format("Insert into cart_items values('%d','%d')",cart.getCartId(), p.getProductId());
+				statement.execute(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addProductInCart(int productId, int userId) {	
+		try {
+			statement=connection.createStatement();
+			String sql;int cartId=0;
+			sql= String.format("Select cartId from cart where UserId = '%d'", userId);
+			ResultSet resultSet= statement.executeQuery(sql);
+			if(resultSet.next())
+				cartId=resultSet.getInt("cartId");
+			sql=String.format("Insert into cart_items values ('%d', '%d')", cartId, productId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteProductFromCart(int productId, int userId) {
+		try {
+			statement=connection.createStatement();
+			String sql;
+			int cartId=0;
+			sql= String.format("Select cartId from cart where UserId = '%d'", userId);
+			ResultSet resultSet= statement.executeQuery(sql);
+			if(resultSet.next())
+				cartId=resultSet.getInt("cartId");
+			sql=String.format("Delete from cart_items where productId= '%d' and cartId = '%d'", productId,cartId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
+	
+//============================================================================================================================================================================
+//**************************************************************** CART ******************************************************************************************************************
+//=============================================================================================================================================================================	
+
 }
 
 

@@ -1,4 +1,4 @@
-package com.order.resource;
+package com.order.main;
 
 import com.order.bean.Cart;
 import com.order.bean.Order;
@@ -39,6 +39,10 @@ public class Main {
 		cart= new DataFetch().fetchCartDetails(907);
 		System.out.println(cart);
 		
+		//new DataFetch().addProductInCart(4, 905);
+		//new DataFetch().addProductInWishList(7, 902);
+		//new DataFetch().deleteProductFromCart(4, 905);
+		new DataFetch().deleteProductFromWishList(7, 902);
 	}
 
 }

@@ -33,11 +33,12 @@ public class validate extends HttpServlet {
 		user.setAddress(address);
 		user.setEmail(email);
 		user.setPassword(password);
+		user.setPhone(Integer.parseInt(phone));
 		
 		
 		//Now create an object of Data fetch to pass these values
 		//This line will show an error because you will have to import the dataFetch class in this file
-		 DataFetch fetch = new DataFetch();
+		DataFetch fetch = new DataFetch();
 		fetch.addUser(user);
 		response.sendRedirect("AfterSignup.html");
 		
