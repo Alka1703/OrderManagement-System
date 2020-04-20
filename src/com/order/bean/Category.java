@@ -4,6 +4,14 @@ public class Category {
 	public int categoryId;
 	public String categoryName;
 	
+	public Category() {
+		super();
+	}
+	public Category(int categoryId, String categoryName) {
+		super();
+		this.categoryId = categoryId;
+		this.categoryName = categoryName;
+	}
 	public int getCategoryId() {
 		return categoryId;
 	}

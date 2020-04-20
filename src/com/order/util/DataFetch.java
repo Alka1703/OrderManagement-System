@@ -14,6 +14,7 @@ import com.order.bean.OrderStatus;
 import com.order.bean.Product;
 import com.order.bean.User;
 import com.order.bean.Wishlist;
+import com.order.exception.CategoryNotFoundException;
 import com.order.exception.ExceptionMessage;
 import com.order.exception.ProductNotFoundException;
 import com.order.exception.UserNotFoundException;
@@ -185,13 +186,13 @@ public class DataFetch {
 //=============================================================================================================================================================================	
 
 	
-//function to fetch product from the product table in the database and store it in product object
+	//function to fetch product from the product table in the database and store it in product object
 	
 	public Product getProduct(int productId) throws ProductNotFoundException {
 		try {
 			statement= connection.createStatement();
 			ResultSet resultSet;
-			String sql;
+			String sql;String categoryId="";
 			sql=String.format("SELECT * FROM product WHERE ProductId = '%d'", productId);
 			Product product= new Product();
 			resultSet= statement.executeQuery(sql);
@@ -201,8 +202,12 @@ public class DataFetch {
 				product.setDescription(resultSet.getString("Description"));
 				product.setName(resultSet.getString("Name"));
 				product.setPrice(resultSet.getInt("Price"));
-				product.setCategory(Category.valueOf(resultSet.getString("Category")));
+				categoryId=resultSet.getString("Category");
 			}
+			sql=String.format("Select CategoryName from category where categoryId = '%d'", categoryId);
+			resultSet= statement.executeQuery(sql);
+			if(resultSet.next())
+				product.setCategory(resultSet.getString("CategoryName"));
 			return product;
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -210,14 +215,23 @@ public class DataFetch {
 		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
 	}
 
-//Function to add the given product in the product table in the database
+	//Function to add the given product in the product table in the database
 
 	public void addProduct(Product product){
 		try {
 			statement= connection.createStatement();
 			String sql; 
-			sql=String.format("Insert into product values('%d','%s', '%s','%s', '%d','%s')",
-								product.getProductId(),product.getCode(),product.getName(), product.getDescription(), product.getPrice(), product.getCategory());
+			ResultSet resultSet;
+			String categoryName=product.getCategory();
+			sql=String.format("Select CategoryId from category where categoryName = '%s'", categoryName);
+			resultSet= statement.executeQuery(sql);
+			int categoryId=0;
+			if(resultSet.next())
+				categoryId =resultSet.getInt("CategoryId");
+			
+			
+			sql=String.format("Insert into product values('%d','%s', '%s','%s', '%d','%d')",
+								product.getProductId(),product.getCode(),product.getName(), product.getDescription(), product.getPrice(), categoryId);
 			statement.execute(sql);	
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -256,5 +270,50 @@ public class DataFetch {
 //*************************************************** PRODUCT ******************************************************************************************************************
 //=============================================================================================================================================================================	
 
+	
+	public Category getCategory(int categoryId) throws CategoryNotFoundException{
+		Category category= new Category();
+		try {
+			statement= connection.createStatement();
+			ResultSet resultSet;
+			String sql;
+			sql= String.format("Select * from Category where categoryId = '%d'", categoryId);
+			resultSet= statement.executeQuery(sql);
+			if(resultSet.next()) {
+				category.setCategoryId(categoryId);
+				category.setCategoryName(resultSet.getString("categoryName"));
+			}
+			return category;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		throw new CategoryNotFoundException(new ExceptionMessage(String.format("Category with ID %d not found", categoryId)));
+	}
+	
+	public void addCategory(Category category) {
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Insert into Category values ('%d', '%s')", category.getCategoryId(), category.getCategoryName());
+			statement.execute(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteCategory(int categoryId) throws CategoryNotFoundException{
+		try {
+			statement= connection.createStatement();
+			String sql;
+			sql= String.format("Delete from Category where CategoryId= '%d'", categoryId);
+			statement.execute(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		throw new CategoryNotFoundException(new ExceptionMessage(String.format("Category with ID %d not found", categoryId)));
+	}
 }	
 	
