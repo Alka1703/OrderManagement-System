@@ -65,6 +65,7 @@ public class DataFetch {
 //Function to fetch user details from the user table in the database and store it in a user object
 	
 	public User getUser(int userId) throws UserNotFoundException {
+		System.out.println("Data");
 		try {
 			statement= connection.createStatement();
 			ResultSet resultSet;
@@ -192,9 +193,11 @@ public class DataFetch {
 		try {
 			statement= connection.createStatement();
 			ResultSet resultSet;
-			String sql;String categoryId="";
+			String sql;
+			int categoryId=0;
 			sql=String.format("SELECT * FROM product WHERE ProductId = '%d'", productId);
 			Product product= new Product();
+			Category category= new Category();
 			resultSet= statement.executeQuery(sql);
 			if(resultSet.next()) {
 				product.setProductId(resultSet.getInt("ProductId"));
@@ -202,12 +205,15 @@ public class DataFetch {
 				product.setDescription(resultSet.getString("Description"));
 				product.setName(resultSet.getString("Name"));
 				product.setPrice(resultSet.getInt("Price"));
-				categoryId=resultSet.getString("Category");
+				categoryId=resultSet.getInt("Category");
 			}
-			sql=String.format("Select CategoryName from category where categoryId = '%d'", categoryId);
+			sql=String.format("Select * from category where categoryId = '%d'", categoryId);
 			resultSet= statement.executeQuery(sql);
-			if(resultSet.next())
-				product.setCategory(resultSet.getString("CategoryName"));
+			if(resultSet.next()) {
+				product.getCategory().setCategoryName(resultSet.getString("CategoryName"));
+				product.getCategory().setCategoryId(categoryId);
+			}
+			product.setCategory(category);
 			return product;
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -222,7 +228,7 @@ public class DataFetch {
 			statement= connection.createStatement();
 			String sql; 
 			ResultSet resultSet;
-			String categoryName=product.getCategory();
+			String categoryName=product.getCategory().getCategoryName();
 			sql=String.format("Select CategoryId from category where categoryName = '%s'", categoryName);
 			resultSet= statement.executeQuery(sql);
 			int categoryId=0;

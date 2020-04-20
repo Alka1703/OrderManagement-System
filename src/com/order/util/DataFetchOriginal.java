@@ -130,7 +130,7 @@ public class DataFetchOriginal {
 				product.setDescription(resultSet.getString("Description"));
 				product.setName(resultSet.getString("Name"));
 				product.setPrice(resultSet.getInt("Price"));
-				product.setCategory(Category.valueOf(resultSet.getString("Category")));
+				//product.setCategory(Category.valueOf(resultSet.getString("Category")));
 			}
 			return product;
 		} catch (SQLException e1) {
@@ -223,7 +223,7 @@ public class DataFetchOriginal {
 					product.setDescription(resultSet.getString("Description"));
 					product.setName(resultSet.getString("Name"));
 					product.setPrice(resultSet.getInt("Price"));
-					product.setCategory(Category.valueOf(resultSet.getString("Category")));
+					//product.setCategory(Category.valueOf(resultSet.getString("Category")));
 				}
 				pr.add(product);
 			}
@@ -299,7 +299,7 @@ public class DataFetchOriginal {
 					product.setDescription(resultSet.getString("Description"));
 					product.setName(resultSet.getString("Name"));
 					product.setPrice(resultSet.getInt("Price"));
-					product.setCategory(Category.valueOf(resultSet.getString("Category")));
+					//product.setCategory(Category.valueOf(resultSet.getString("Category")));
 				}
 				pr.add(product);
 			}
@@ -387,7 +387,7 @@ public class DataFetchOriginal {
 					product.setDescription(resultSet.getString("Description"));
 					product.setName(resultSet.getString("Name"));
 					product.setPrice(resultSet.getInt("Price"));
-					product.setCategory(Category.valueOf(resultSet.getString("Category")));
+					//product.setCategory((resultSet.getString("Category")));
 				}
 				pr.add(product);
 			}
