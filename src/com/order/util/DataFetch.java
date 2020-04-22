@@ -4,16 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
-import com.order.bean.Cart;
+import java.util.ArrayList;
 import com.order.bean.Category;
-import com.order.bean.Order;
-import com.order.bean.OrderStatus;
 import com.order.bean.Product;
 import com.order.bean.User;
-import com.order.bean.Wishlist;
 import com.order.exception.CategoryNotFoundException;
 import com.order.exception.ExceptionMessage;
 import com.order.exception.ProductNotFoundException;
@@ -67,13 +61,43 @@ public class DataFetch {
 				user.setAddress(resultSet.getString("Address"));
 				user.setPhone(resultSet.getInt("Phone"));
 				user.setPassword(resultSet.getString("Password"));
+				System.out.println(user);
+				return user;
 			}
-			System.out.println(user);
-			return user;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
+		String temp=String.format("User with ID %d not found", userId);
+		throw new UserNotFoundException(new ExceptionMessage(temp));
+	}
+	
+	public ArrayList<User> getAllUsers() {
+		
+		try {
+			statement= connection.createStatement();
+			ArrayList<User>u= new ArrayList<User>();
+			ResultSet resultSet;
+			String sql;
+			sql=String.format("SELECT * FROM user");
+			resultSet= statement.executeQuery(sql);
+			while(resultSet.next()){
+				User user= new User();
+				user.setId(resultSet.getInt("userid"));
+				user.setName(resultSet.getString("name"));
+				user.setEmail(resultSet.getString("Email"));
+				user.setAddress(resultSet.getString("Address"));
+				user.setPhone(resultSet.getInt("Phone"));
+				user.setPassword(resultSet.getString("Password"));
+				u.add(user);
+			}
+			return u;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	//Function to register a new user to the database
@@ -95,8 +119,10 @@ public class DataFetch {
 		try {
 			statement= connection.createStatement();
 			String sql;
-			sql= String.format("Delete from user where userid = '%d' ", userId);
+			sql= String.format("Delete from user where userid = %d ", userId);
+			System.out.println(sql);
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +134,7 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Update user set email = '%s' where userId = '%d'", email, userId);
 			statement.execute(sql);
-			System.out.println("Data Fetch");
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -123,6 +149,7 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Update  user set phone = '%d' where userId = '%d'", phone, userId);
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -134,9 +161,8 @@ public class DataFetch {
 			statement= connection.createStatement();
 			String sql;
 			sql= String.format("Update  user set address = '%s' where userId = '%d'", address, userId);
-			
 			statement.execute(sql);
-			System.out.println("After update");
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -149,6 +175,7 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Update  user set password = '%s' where userId = '%d'", password, userId);
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -161,6 +188,7 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Update  user set name = '%s' where userId = '%d'", name, userId);
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -200,9 +228,10 @@ public class DataFetch {
 			}
 			sql=String.format("Select * from category where categoryId = '%d'", categoryId);
 			resultSet= statement.executeQuery(sql);
+			//Category category;
 			if(resultSet.next()) {
-				product.getCategory().setCategoryName(resultSet.getString("CategoryName"));
-				product.getCategory().setCategoryId(categoryId);
+				category.setCategoryName(resultSet.getString("CategoryName"));
+				category.setCategoryId(categoryId);
 			}
 			product.setCategory(category);
 			return product;
@@ -211,6 +240,44 @@ public class DataFetch {
 		}
 		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
 	}
+	
+	public ArrayList<Product> getAllProducts() throws ProductNotFoundException {
+		try {
+			ArrayList<Product>pr= new ArrayList<Product>();
+			statement= connection.createStatement();
+			ResultSet resultSet;
+			ResultSet resultSet1;
+			String sql;
+			int categoryId=0;
+			sql=String.format("SELECT * FROM product");
+			
+			resultSet= statement.executeQuery(sql);
+			while(resultSet.next()) {
+				Product product= new Product();
+				Category category= new Category();
+				product.setProductId(resultSet.getInt("ProductId"));
+				product.setCode(resultSet.getString("ProductCode"));
+				product.setDescription(resultSet.getString("Description"));
+				product.setName(resultSet.getString("Name"));
+				product.setPrice(resultSet.getInt("Price"));
+				categoryId=resultSet.getInt("Category");
+				Statement statement1=connection.createStatement();
+				sql=String.format("Select * from category where categoryId = '%d'", categoryId);
+				resultSet1= statement1.executeQuery(sql);
+				if(resultSet1.next()) {
+					category.setCategoryName(resultSet1.getString("CategoryName"));
+					category.setCategoryId(categoryId);
+				}
+				product.setCategory(category);
+				pr.add(product);
+			}
+			return pr;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return null;
+	}
+
 
 	//Function to add the given product in the product table in the database
 
@@ -241,6 +308,7 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Delete from product where productId = '%d' ", productId);
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -253,6 +321,7 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Update product set price = '%d' where productId = '%d'", price, productId);
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -294,6 +363,7 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Insert into Category values ('%d', '%s')", category.getCategoryId(), category.getCategoryName());
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -306,11 +376,31 @@ public class DataFetch {
 			String sql;
 			sql= String.format("Delete from Category where CategoryId= '%d'", categoryId);
 			statement.execute(sql);
+			return ;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		throw new CategoryNotFoundException(new ExceptionMessage(String.format("Category with ID %d not found", categoryId)));
+	}
+	
+	public ArrayList<Category> fetchAllCategory() {
+		try {
+			statement= connection.createStatement();
+			ArrayList<Category>category= new ArrayList<Category>();
+			String sql= String.format("Select * from category");
+			ResultSet resultSet= statement.executeQuery(sql);
+			while(resultSet.next()) {
+				Category c= new Category();
+				c.setCategoryId(resultSet.getInt("CategoryId"));
+				c.setCategoryName(resultSet.getString("CategoryName"));
+				category.add(c);
+			}
+			return category;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }	
 	

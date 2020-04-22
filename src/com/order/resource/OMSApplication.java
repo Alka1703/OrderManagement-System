@@ -17,6 +17,8 @@ public class OMSApplication extends Application{
 		Set<Class<?>> classes;
 		classes=new HashSet<Class<?>>();
 		classes.add(UserResource.class);
+		classes.add(ProductResource.class);
+		classes.add(CategoryResource.class);
 		return classes;
 	}
 }
