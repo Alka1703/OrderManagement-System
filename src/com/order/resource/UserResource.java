@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import java.sql.SQLException;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -23,28 +24,39 @@ import com.order.util.DataFetch;
 @Path("/users")
 public class UserResource //Root Resource Class
 {
-	//dependency injection
-	@Context //Jersey Container will initialize the variable on my behalf
+	@Context 
 	private ResourceContext resourceContext;
 	
-	@Context
-	private UriInfo uriInfo;
 	@GET
 	@Produces(value={MediaType.APPLICATION_JSON})
-	@Path("{userId}")   
-	public Response fetchUserDetails(@PathParam("userId") int userId) throws UserNotFoundException, SQLException
-	{
-		System.out.println("User Resource");
-		User user;
-		user=new DataFetch().getUser(userId);
-		return Response.ok(user).build(); 
+	@Path("/{userId}")   
+	public Response getUser(@PathParam("userId") int userId) throws UserNotFoundException, SQLException {
+		User user= new DataFetch().getUser(userId);
+		return Response.ok(user).build();
 	}
 	
-	@POST
-	@Consumes(value={MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	public void createUser(User user) throws SQLException
-	{
-		new DataFetch().addUser(user);
-	}
+	 @POST
+	 @Consumes(value={MediaType.APPLICATION_JSON})
+	 public void createUser(User user) throws SQLException { 
+		 new DataFetch().addUser(user);
+	 }
+	 
+	 @PUT
+	 @Consumes(value= {MediaType.APPLICATION_JSON})
+	 @Path("/{userId}/update_email/{email}")
+	 public void updateUserEmail(@PathParam("userId")int userId, 
+			 					 @PathParam("email")String email)throws UserNotFoundException, SQLException {
+		 System.out.println("update");
+		 new DataFetch().updateUserEmail(userId, email);
+	 }
+	 @DELETE
+	 @Path("/{userId}/delete-user")
+	 public void deleteUser(@PathParam("userId")int userId) throws UserNotFoundException, SQLException {
+		 new DataFetch().deleteUser(userId);
+		 
+	 }
+	 
+	 
+	 
 	
 }

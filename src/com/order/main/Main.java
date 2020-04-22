@@ -11,37 +11,28 @@ import com.order.util.DataFetch;
 
 public class Main {
 	public static void main(String args[]) {
-		User user= new User();
+		User user = new User();
 		try {
 			user=new DataFetch().getUser(902);
-			System.out.println(user);
+		} catch (UserNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			new DataFetch().deleteUser(901);
+			//System.out.println(user);
 		} catch (UserNotFoundException e) {
 			e.printStackTrace();
 		}
-		//User user1= new User(908, "rashmi_prasad@persistent.com", "rashmi@123", 989788987, "kolkata","Rashmi Prasad");
-		//new DataFetch().addUser(user1);
-		Product product= new Product();
+		
 		try {
-			product= new DataFetch().getProduct(1);
-			System.out.println(product);
-		} catch (ProductNotFoundException e) {
+			new DataFetch().updateUserEmail(902, "alka1_prasad@persistent.com");
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*
-		 * Order order= new Order(); order=new DataFetch().fetchOrderDetails(502);
-		 * System.out.println(order);
-		 * 
-		 * Wishlist wishlist= new Wishlist(); wishlist= new
-		 * DataFetch().fetchWishlist(901); System.out.println(wishlist);
-		 * 
-		 * Cart cart= new Cart(); cart= new DataFetch().fetchCartDetails(907);
-		 * System.out.println(cart);
-		 * 
-		 * //new DataFetch().addProductInCart(4, 905); //new
-		 * DataFetch().addProductInWishList(7, 902); //new
-		 * DataFetch().deleteProductFromCart(4, 905); new
-		 * DataFetch().deleteProductFromWishList(7, 902);
-		 */
+		
+		
 	}
 
 }

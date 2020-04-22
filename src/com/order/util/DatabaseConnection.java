@@ -8,7 +8,8 @@ public class DatabaseConnection {
 	private  Connection conn=null;
 	static{
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("hiih");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -16,11 +17,11 @@ public class DatabaseConnection {
 	public  Connection createConnection() throws SQLException{
 		
 		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/oms_db","root","");
+			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/oms_db","root","alka@1703");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("dbconnection");
 		return conn;
 	}
 	public  void closeConnection()

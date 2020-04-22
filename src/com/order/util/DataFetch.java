@@ -20,8 +20,8 @@ import com.order.exception.ProductNotFoundException;
 import com.order.exception.UserNotFoundException;
 
 public class DataFetch {
-	static Connection connection;
-	Statement statement;
+	static Connection connection=null;
+	Statement statement=null;
 	static {
 		DatabaseConnection dc= new DatabaseConnection();
 			try {
@@ -32,32 +32,18 @@ public class DataFetch {
 	}
 	
 
-	public boolean CheckLogin(String email, String pass) {
-		boolean flag= false;
-		String Select_sql="select * from user where email='"+email+"' and password='"+pass+"'";
-		try
-		{
-			DatabaseConnection dbcon=new DatabaseConnection();
-			Connection con=dbcon.createConnection();
-			Statement statament=con.prepareStatement(Select_sql);
-			ResultSet resultSet=statament.executeQuery(Select_sql);
-			if (resultSet.next())
-			{
-				System.out.println("Correct");
-				flag = true;
-			}
-			else
-			{
-				System.out.println("incorrect");
-				flag = false;
-			}
-		}
-		catch(SQLException sqe)
-		{
-			sqe.printStackTrace();
-		}
-		return flag;
-	}	
+	/*
+	 * public boolean CheckLogin(String email, String pass) { boolean flag= false;
+	 * String
+	 * Select_sql="select * from user where email='"+email+"' and password='"+pass+
+	 * "'"; try { DatabaseConnection dbcon=new DatabaseConnection(); Connection
+	 * con=dbcon.createConnection(); Statement
+	 * statament=con.prepareStatement(Select_sql); ResultSet
+	 * resultSet=statament.executeQuery(Select_sql); if (resultSet.next()) {
+	 * System.out.println("Correct"); flag = true; } else {
+	 * System.out.println("incorrect"); flag = false; } } catch(SQLException sqe) {
+	 * sqe.printStackTrace(); } return flag; }
+	 */	
 //============================================================================================================================================================================
 //*************************************************** USER	*******************************************************************************************************************
 //=============================================================================================================================================================================	
@@ -67,7 +53,7 @@ public class DataFetch {
 	public User getUser(int userId) throws UserNotFoundException {
 		System.out.println("Data");
 		try {
-			statement= connection.createStatement();
+			statement= connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet resultSet;
 			String sql;
 			sql=String.format("SELECT * FROM user WHERE UserId = '%d'", userId);
@@ -82,6 +68,7 @@ public class DataFetch {
 				user.setPhone(resultSet.getInt("Phone"));
 				user.setPassword(resultSet.getString("Password"));
 			}
+			System.out.println(user);
 			return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -108,7 +95,7 @@ public class DataFetch {
 		try {
 			statement= connection.createStatement();
 			String sql;
-			sql= String.format("Delete from user where userId = '%d' ", userId);
+			sql= String.format("Delete from user where userid = '%d' ", userId);
 			statement.execute(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,11 +106,13 @@ public class DataFetch {
 		try {
 			statement= connection.createStatement();
 			String sql;
-			sql= String.format("Update  user set email = '%s' where userId = '%d'", email, userId);
+			sql= String.format("Update user set email = '%s' where userId = '%d'", email, userId);
 			statement.execute(sql);
+			System.out.println("Data Fetch");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Not found");
 		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
 
 	}
@@ -145,7 +134,9 @@ public class DataFetch {
 			statement= connection.createStatement();
 			String sql;
 			sql= String.format("Update  user set address = '%s' where userId = '%d'", address, userId);
+			
 			statement.execute(sql);
+			System.out.println("After update");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
