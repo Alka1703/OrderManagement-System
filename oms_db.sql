@@ -239,6 +239,56 @@ INSERT INTO `wishlist` (`WishlistID`, `WishedBy`) VALUES
 (1003, 903),
 (1004, 904);
 
+
+CREATE TABLE stock (
+    StockId int(5) PRIMARY KEY,
+    Quantity int(5) ,
+    ProductId int(5) FOREIGN KEY REFERENCES product(ProductId)
+);
+
+INSERT INTO stock values(1,5,2);
+INSERT INTO stock values(2,3,9);
+INSERT INTO stock values(3,8,7);
+INSERT INTO stock values(4,4,19);
+INSERT INTO stock values(5,1,10);
+INSERT INTO stock values(6,9,14);
+INSERT INTO stock values(7,12,8);
+INSERT INTO stock values(8,10,6);
+INSERT INTO stock values(9,2,3);
+INSERT INTO stock values(10,13,1);
+INSERT INTO stock values(11,12,5);
+INSERT INTO stock values(12,10,31);
+INSERT INTO stock values(13,17,22);
+INSERT INTO stock values(14,15,33);
+INSERT INTO stock values(15,1,17);
+INSERT INTO stock values(16,9,11);
+INSERT INTO stock values(17,12,37);
+INSERT INTO stock values(18,7,26);
+INSERT INTO stock values(19,11,40);
+INSERT INTO stock values(20,16,18);
+INSERT INTO stock values(21,3,4);
+INSERT INTO stock values(22,2,34);
+INSERT INTO stock values(23,6,29);
+INSERT INTO stock values(24,1,20);
+INSERT INTO stock values(25,3,16);
+INSERT INTO stock values(26,17,32);
+INSERT INTO stock values(27,19,38);
+INSERT INTO stock values(28,20,39);
+INSERT INTO stock values(29,15,21);
+INSERT INTO stock values(30,11,30);
+INSERT INTO stock values(31,7,23);
+INSERT INTO stock values(32,9,28);
+INSERT INTO stock values(33,2,15);
+INSERT INTO stock values(34,4,36);
+INSERT INTO stock values(35,6,12);
+INSERT INTO stock values(36,10,25);
+INSERT INTO stock values(37,13,27);
+INSERT INTO stock values(38,2,13);
+INSERT INTO stock values(39,9,35);
+INSERT INTO stock values(40,20,24);
+
+
+
 --
 -- Indexes for dumped tables
 --
