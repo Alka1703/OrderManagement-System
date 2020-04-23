@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import com.order.exception.OrderExceptionMapper;
+
 @ApplicationPath("/")
 public class OMSApplication extends Application{
 	@Override
@@ -19,6 +21,7 @@ public class OMSApplication extends Application{
 		classes.add(UserResource.class);
 		classes.add(ProductResource.class);
 		classes.add(CategoryResource.class);
+		classes.add(OrderExceptionMapper.class);
 		return classes;
 	}
 }

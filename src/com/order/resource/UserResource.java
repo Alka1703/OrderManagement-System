@@ -45,7 +45,7 @@ public class UserResource
 	
 	 @POST
 	 @Consumes(value={MediaType.APPLICATION_JSON})
-	 public void createUser(User user) throws SQLException { 
+	 public void createUser(User user) throws UserNotFoundException,SQLException { 
 		 new DataFetch().addUser(user);
 	 }
 	 

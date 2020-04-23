@@ -45,9 +45,8 @@ public class DataFetch {
 //Function to fetch user details from the user table in the database and store it in a user object
 	
 	public User getUser(int userId) throws UserNotFoundException {
-		System.out.println("Data");
 		try {
-			statement= connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			statement= connection.createStatement();
 			ResultSet resultSet;
 			String sql;
 			sql=String.format("SELECT * FROM user WHERE UserId = '%d'", userId);
@@ -68,11 +67,10 @@ public class DataFetch {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		String temp=String.format("User with ID %d not found", userId);
-		throw new UserNotFoundException(new ExceptionMessage(temp));
+		throw new UserNotFoundException(new ExceptionMessage(String.format("User with ID %d not found", userId)));
 	}
 	
-	public ArrayList<User> getAllUsers() {
+	public ArrayList<User> getAllUsers() throws UserNotFoundException {
 		
 		try {
 			statement= connection.createStatement();
@@ -81,6 +79,10 @@ public class DataFetch {
 			String sql;
 			sql=String.format("SELECT * FROM user");
 			resultSet= statement.executeQuery(sql);
+			if(resultSet.next()==false) {
+				throw new UserNotFoundException(new ExceptionMessage(String.format("No User Found")));
+				
+			}
 			while(resultSet.next()){
 				User user= new User();
 				user.setId(resultSet.getInt("userid"));
@@ -102,17 +104,21 @@ public class DataFetch {
 	
 	//Function to register a new user to the database
 	
-	public void addUser(User user){
+	public void addUser(User user) throws UserNotFoundException{
 		try {
 			statement= connection.createStatement();
-			String sql;
+			String sql= String.format("SELECT * FROM user where userId='%d'",user.getId());
+			ResultSet rs=statement.executeQuery(sql);
+			if(rs.next())
+				throw new UserNotFoundException(new ExceptionMessage(String.format("User already exists")));
+			
 			sql=String.format("Insert into user values('%d','%s', '%s','%s', '%s','%d')",
 								user.getId(), user.getEmail(),user.getPassword(),user.getAddress(),user.getName(),user.getPhone());
 			statement.execute(sql);
+			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public void deleteUser(int userId) throws UserNotFoundException{
@@ -214,7 +220,7 @@ public class DataFetch {
 			ResultSet resultSet;
 			String sql;
 			int categoryId=0;
-			sql=String.format("SELECT * FROM product WHERE ProductId = '%d'", productId);
+			sql=String.format("SELECT * FROM product WHERE ProductId = '%d' ", productId);
 			Product product= new Product();
 			Category category= new Category();
 			resultSet= statement.executeQuery(sql);
@@ -228,7 +234,6 @@ public class DataFetch {
 			}
 			sql=String.format("Select * from category where categoryId = '%d'", categoryId);
 			resultSet= statement.executeQuery(sql);
-			//Category category;
 			if(resultSet.next()) {
 				category.setCategoryName(resultSet.getString("CategoryName"));
 				category.setCategoryId(categoryId);
@@ -238,7 +243,7 @@ public class DataFetch {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
+		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with Id %d not found", productId)));
 	}
 	
 	public ArrayList<Product> getAllProducts() throws ProductNotFoundException {
@@ -250,8 +255,11 @@ public class DataFetch {
 			String sql;
 			int categoryId=0;
 			sql=String.format("SELECT * FROM product");
-			
 			resultSet= statement.executeQuery(sql);
+			
+			if(resultSet.next()==false)
+				throw new ProductNotFoundException(new ExceptionMessage(String.format("No Product Found")));
+			
 			while(resultSet.next()) {
 				Product product= new Product();
 				Category category= new Category();
@@ -286,16 +294,20 @@ public class DataFetch {
 			statement= connection.createStatement();
 			String sql; 
 			ResultSet resultSet;
+			
+			sql=String.format("SELECT * FROM product WHERE ProductId = '%s' ", product.getProductId());
+			resultSet= statement.executeQuery(sql);
+			if(resultSet.next()) {
+				
+			}
 			String categoryName=product.getCategory().getCategoryName();
 			sql=String.format("Select CategoryId from category where categoryName = '%s'", categoryName);
 			resultSet= statement.executeQuery(sql);
 			int categoryId=0;
 			if(resultSet.next())
 				categoryId =resultSet.getInt("CategoryId");
-			
-			
 			sql=String.format("Insert into product values('%d','%s', '%s','%s', '%d','%d')",
-								product.getProductId(),product.getCode(),product.getName(), product.getDescription(), product.getPrice(), categoryId);
+								product.getProductId(), product.getCode(),product.getName(), product.getDescription(), product.getPrice(), categoryId);
 			statement.execute(sql);	
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -306,15 +318,15 @@ public class DataFetch {
 		try {
 			statement= connection.createStatement();
 			String sql;
-			sql= String.format("Delete from product where productId = '%d' ", productId);
+			sql= String.format("Delete from product where productCode = '%d' ", productId);
 			statement.execute(sql);
 			return;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
-		
+		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with Code %d not found", productId)));
 	}
+	
 	public void updateProductPrice(int productId, int price) throws ProductNotFoundException{
 		try {
 			statement= connection.createStatement();
@@ -323,10 +335,9 @@ public class DataFetch {
 			statement.execute(sql);
 			return;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with ID %d not found", productId)));
+		throw new ProductNotFoundException(new ExceptionMessage(String.format("Product with Id %d not found", productId)));
 
 	}
 	

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.order.bean.User;
+import com.order.exception.UserNotFoundException;
 public class validate extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -39,7 +40,12 @@ public class validate extends HttpServlet {
 		//Now create an object of Data fetch to pass these values
 		//This line will show an error because you will have to import the dataFetch class in this file
 		DataFetch fetch = new DataFetch();
-		fetch.addUser(user);
+		try {
+			fetch.addUser(user);
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		response.sendRedirect("AfterSignup.html");
 		
 	}
