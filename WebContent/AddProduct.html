@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Product</title>
+</head>
+<script>
+function loadDoc()
+{
+	var id=document.getElementById('id').value;
+	var code=document.getElementById('code').value;
+	var name=document.getElementById('name').value;
+	var desc=document.getElementById('desc').value;
+	var price=document.getElementById('price').value;
+	var category=document.getElementById('category').value;
+	var obj={
+			"id":id,
+			"code":code,
+			"name":name,
+			"desc":desc,
+			"price":price,
+			"category":category
+	}
+	var s=JSON.stringify(obj);
+	//console.log(s);
+	 var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	    	var obj1=this.responseText;
+	      var x="<h3>Product Created </h3><br>";
+	    	document.getElementById('success').innerHTML=x;
+	      
+	    }
+	    else if(this.readyState == 4 && this.status == 400)
+	    {
+	    	var obj1 = this.responseText;
+	    	console.log(obj1);
+	    	
+	   	}
+	  };
+	  xhttp.open("POST", "http://localhost:8080/OrderManagementSystem/home/products/", true);
+	  xhttp.setRequestHeader("Content-type", "application/json");
+	  xhttp.send(s);
+	
+}
+</script>
+<body>
+
+
+    <div id="main">
+        <div id="table">
+            <div id="header">
+                <p>Add a product</p>
+            </div>
+            <div id="mainBody">
+                <form method="post">
+                <label>Product ID</label>
+                  <input type="text" id="id" name="id">
+                  <label>Product code</label>
+                  <input type="text" id="code" name="code">
+                  <label>Product name</label>
+                  <input type="text" id="name" name="name">
+                  <label>Description</label>
+                  <input type="text" id="desc" name="description">
+                  <label>Product cost</label>
+                  <input type="number" id="price" name="price">
+                  <label>Category</label>
+                  <select id="category" name="category">
+                    <option value="GROCERY_AND_STAPLES">GROCERY_AND_STAPLES</option>
+                    <option value="VEGETABLES_AND_FRUITS">VEGETABLES_AND_FRUITS</option>
+                    <option value="HOME_AND_KITCHEN">HOME_AND_KITCHEN</option>
+                    <option value="PERSONAL_CARE">PERSONAL_CARE</option>
+                    <option value="BISCUITS_SNACKS_CHOCOLATES">BISCUITS_SNACKS_CHOCOLATES</option>
+                    <option value="HOUSEHOLD_ITEMS">HOUSEHOLD_ITEMS</option>
+                    <option value="BREAKFAST_AND_DAIRY">BREAKFAST_AND_DAIRY</option>
+                    <option value="BEVERAGES">BEVERAGES</option>
+
+                  </select>
+                  <button type="submit" onclick="loadDoc()">Submit Details</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
+    <div id="success"></div>
+</body>
+</html>
