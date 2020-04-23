@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+	<script>
+function loadDoc() {
+	var z=document.getElementById('id').value;
+	
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		  var txt="";
+	    if (this.readyState == 4 && this.status == 200) {
+	    	
+	    	var obj1=JSON.parse(this.responseText);
+	    	var x="<table><tr><th>Id</th><th>Code</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th></tr>";
+	    	x+="<tr><td>"+obj1.id+"</td><td>"+obj1.code+"</td><td>"+obj1.name+"</td><td>"+obj1.desc+"</td><td>"+obj1.price+"</td><td>"+obj1.category+"</td></tr>";
+	    	x+="</table>";
+	    	document.getElementById('success').innerHTML=x;
+	    	
+	     
+	    }
+	    else if(this.readyState == 4 && this.status == 400)
+	    {	
+	    	var obj1=JSON.parse(this.responseText);
+	    	
+	    	
+	    	for(i in obj1){
+	    		var  x="<table><tr><td>"+obj1[i]+"</td></tr></table>"
+	    		document.getElementById('success').innerHTML=x;
+	    	}
+	    }
+	  };
+	  xhttp.open("GET", "http://localhost:8080/OrderManagementSystem/home/products/"+z, true);
+	  xhttp.send();
+	}
+	
+</script>
+<body>
+<div id="upper">
+	<h3>Enter the Product Id</h3>
+	<input type="text" placeholder="User Id" required id="id" >
+	<button onclick="loadDoc()">Submit</button>
+</div>
+<br>
+<br>
+<div id="success">
+</div>
+</body>
+</html>
