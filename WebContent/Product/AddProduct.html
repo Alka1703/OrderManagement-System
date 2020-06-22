@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Product</title>
+<style>
+	#form{
+	width: 600px;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding : 2px;
+	}
+</style>
+</head>
+<script>
+function loadDoc()
+{
+	var id=document.getElementById('pid').value;
+	var code=document.getElementById('code').value;
+	var name=document.getElementById('name').value;
+	var desc=document.getElementById('desc').value;
+	var price=document.getElementById('price').value;
+	var cid=document.getElementById('cid').value;
+	var category=document.getElementById('category').value;
+	var obj={
+			"productId":id,
+			"code":code,
+			"name":name,
+			"description":desc,
+			"price":price,
+			"category":{
+				"categoryId": cid,
+				"categoryName": category
+			}
+	}
+	
+	var s=JSON.stringify(obj);
+	console.log(s);
+	 var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	    	var obj1=JSON.parse(this.responseText);
+	      var x="<h3>Product Created </h3><br><table border=1><tr><th>Product Id</th><th> Product Code</th><th>Product Name</th><th>Description</th><th>Price</th><th>Category</th></tr>";
+	    	x+="<tr><td>"+obj1.productId+"</td><td>"+obj1.code+"</td><td>"+obj1.name+"</td><td>"+obj1.description+"</td><td>"+obj1.price+"</td><td>"+obj1.category.categoryName+"</td></tr>";
+	    	x+="</table>";
+	    	document.getElementById('success').innerHTML=x;
+	      
+	    }
+	    else if(this.readyState == 4 && this.status == 400)
+	    {
+	    	var obj1 = JSON.parse(this.responseText);
+	    	var x="<h3>"+obj1.message+"</h3>";
+	    	document.getElementById('success').innerHTML=x;
+	    	
+	   	}
+	    
+	  };
+	  xhttp.open("POST", "http://localhost:8080/OrderManagementSystem-Office/home/products/add-product", true);
+	  xhttp.setRequestHeader("Content-type", "application/json");
+	  xhttp.send(s);
+	
+}
+</script>
+<body>
+	<h2 style="text-align:center;">Add New Product</h2>
+	<div style="padding-left:25%;">
+	
+	<div id="form">
+	
+	<table style="padding-left:25%;"><tr>
+		<td><h3>Product Id</h3></td>
+		<td><input type="text" placeholder="Product Id" required id="pid"></td>
+		</tr>
+		<tr>
+		<td><h3>Product Code</h3></td>
+		<td><input type="text" placeholder="Code" required id="code"></td>
+		</tr>
+		<tr>
+		<td><h3>Description</h3></td>
+		<td><input type="text" placeholder="Description" required id="desc"></td>
+		<tr>
+		</tr>
+		<td><h3>Product Name</h3></td>
+		<td><input type="text" placeholder="Name" required id="name"></td>
+		<tr>
+		</tr>
+		<td><h3>Price</h3></td>
+		<td><input type="number" placeholder="Price" required id="price"></td>
+		</tr>
+		<tr>
+		<td><h3>Category Id</h3></td>
+		<td><input type="number" placeholder="Category Id" required id="cid"></td>
+		</tr>
+		<tr>
+		<td><h3>Category Name</h3></td>
+		<td><input type="text" placeholder="Category Name" required id="category"></td>
+		</tr>
+		</table>
+		<br>
+		<div style="padding-left: 40%; ">
+		<button onclick="loadDoc()">Submit</button>
+		</div>
+	<div style="padding-left: 10%;">
+		<div id="success">
+		</div>
+	</div>
+	<br><br>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+
+header{
+    background-color: rgb(15, 15, 49);
+    color: white;
+    height: 130px;
+    width: 100%;
+}
+
+.card-deck{
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+}
+.card-deck1{
+    padding-left: 30px;
+    padding-right: 40px;
+    padding-top: 30px;
+}
+.card-body{
+	height: 50px;
+}
+header h1 {
+    float: left;
+    text-align: left;
+    width: 60%;
+    padding-left: 20px;
+    padding-top: 35px;
+   
+}
+#partTwo{
+    float: right;
+    text-align: right;
+    width: 12%;
+    font-size: medium;
+}
+li{
+    list-style: none;
+    color:black;
+    text-align: left;
+}
+h3{
+    font-size: 30px;
+    color:black;
+    text-decoration-line: underline;
+}
+.btn{
+    width: 250px;
+}
+.btn1{
+    width:150px;
+    
+}
+.btn2{
+    background-color: purple;
+}

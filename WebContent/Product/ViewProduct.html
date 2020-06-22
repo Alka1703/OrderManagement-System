@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<style>
+	#upper{
+	width: 600px;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding : 2px;
+	}
+</style>
+<title>View Product</title>
+</head>
+<script>
+	window.onload = function (e){
+		var vals = getUrlVars();
+		var productId = vals['productId']||"";
+		loadDoc(productId);
+	}
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}
+	function loadDoc(productId) {
+		var z=productId
+	
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		  var txt="";
+	    if (this.readyState == 4 && this.status == 200) {
+	    	var obj1=JSON.parse(this.responseText);
+	    	var x="<table border=1><tr><th>Id</th><th>Code</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th></tr>";
+	    	x+="<tr><td>"+obj1.productId+"</td><td>"+obj1.code+"</td><td>"+obj1.name+"</td><td>"+obj1.description+"</td><td>"+obj1.price+"</td><td>"+obj1.category.categoryName+"</td></tr>";
+	    	x+="</table>";
+	    	document.getElementById('success').innerHTML=x;
+	    	
+	     
+	    }
+	    else if(this.readyState == 4 && this.status == 400)
+	    {	
+	    	var obj1=JSON.parse(this.responseText);
+	    	
+	    	
+	    	for(i in obj1){
+	    		var  x="<table><tr><td>"+obj1[i]+"</td></tr></table>"
+	    		document.getElementById('success').innerHTML=x;
+	    	}
+	    }
+	  };
+	  xhttp.open("GET", "http://localhost:8080/OrderManagementSystem-Office/home/products/"+z, true);
+	  xhttp.send();
+	}
+	
+</script>
+<body>
+
+<br>
+<h2 style="text-align:center">Product</h2>
+<div style="padding-left:27%;">
+		
+		<div id="upper" style= "padding-left:20px">
+			
+			<br><br>
+			<div id="success">
+			</div>
+			<br>
+		</div>
+	</div>
+
+</body>
+</html>

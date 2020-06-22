@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>View All Orders</title>
+</head>
+<script>
+function loadDoc() {
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		  var txt="";
+	    if (this.readyState == 4 && this.status == 200) {
+	    	
+	    	var obj1=JSON.parse(this.responseText);
+	    	var x="<table border=1><tr><th>OrderId</th><th>Ordered By</th><th>Products Ordered</th></tr>";
+	    	for(i in obj1)
+	    	{
+	    		var y="<ul>";
+	    		for(p in obj1[i].cart){
+	    			y+="<li>"+obj1[i].cart[p].name+"</li>";
+	    		}
+		    	y+="</ul>";
+	    		x+="<tr><td>"+obj1[i].orderId+"</td><td>"+obj1[i].orderedBy.name+"</td><td>"+ y +"</td></tr>";
+	    	}
+	    	x=="</table>"
+	    	document.getElementById('success').innerHTML=x;
+	    	
+	    }
+	    else if(this.readyState == 4 && this.status == 400)
+	    {	
+	    	var obj1=JSON.parse(this.responseText);
+	    	
+	    	
+	    	for(i in obj1){
+	    		var  x="<table><tr><td>"+obj1[i]+"</td></tr></table>"
+	    		document.getElementById('success').innerHTML=x;
+	    	}
+	    }
+	  };
+	  xhttp.open("GET", "http://localhost:8080/OrderManagementSystem-Office/home/all-orders", true);
+	  xhttp.send();
+	}
+	window.onload=loadDoc();
+</script>
+<h2 style="text-align: center; text-decoration: underline, blue;">All Orders Received</h2>
+<br>
+<div id="success" style="padding-left: 37%;">	
+</div>
+
+</body>
+</html>

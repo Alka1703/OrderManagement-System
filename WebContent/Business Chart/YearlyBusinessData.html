@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Yearly Business Data</title>
+<style>
+	#form{
+	width: 270px;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding : 2px;
+	}
+</style>
+</head>
+<script>
+    function loadDoc(){
+        var year=document.getElementById('year').value;
+        
+	    var xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var obj1=JSON.parse(this.responseText);
+                document.getElementById('success').value=obj1.amount;
+                document.getElementById('failed').innerHTML="";
+            }
+            else if(this.readyState == 4 && this.status == 400)
+            {	
+                var obj1=JSON.parse(this.responseText);
+               
+                for(i in obj1){
+    	    		var  x="<label>"+obj1[i]+"</label>";
+    	    		document.getElementById('success').value=0;
+                    document.getElementById('failed').innerHTML=x;
+    	    	}
+            }
+	    };
+	    
+	    var link="http://localhost:8080/OrderManagementSystem-Office/home/business-chart/yearly-data/" +  year;
+	  xhttp.open("GET",link, true);
+	  xhttp.send();
+    }
+
+</script>
+<body>
+    <h2 style="text-align:center">Monthly Business Data</h2>
+<div style="padding-left: 40%">
+<div id="form" style="padding-left: 5%">
+    <br>
+    
+	<br>
+	<label>Year :
+	<input type="number" placeholder="Year"  id="year" required> </label>
+	<br>
+	<br>
+	<button onclick="loadDoc()" type = submit>Submit</button>
+    <br>
+    <br>
+    <div>
+     <label>Amount :
+    <input type="number" id='success'></label>
+	</div>
+	<br>
+	<div id='failed'>
+	</div>
+	</div>
+</div>
+</body>
+</html>
+

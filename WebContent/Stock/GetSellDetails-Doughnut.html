@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src= "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<title>Product Sell Details- PolarArea</title>
+</head>
+<body>
+	<script>
+        function loadDoc() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var mychart=document.getElementById('myChart');
+                    var obj1=JSON.parse(this.responseText);
+                    var label=[];
+                    var datas=[];
+                    for(i in obj1){
+                    	var temp="Category "+obj1[i].categoryId;
+                        label.push(temp);
+                        datas.push(obj1[i].qty);
+                    }
+                    Chart.defaults.global.defaultFontFamily = 'Lato';
+                    Chart.defaults.global.defaultFontSize = 18;
+                    Chart.defaults.global.defaultFontColor = '#777';
+                    var barchart = new Chart(myChart, {
+                        type: 'doughnut', 
+                        data:{
+                        labels:label,
+                        datasets: [{
+                            label:'Products Sold',
+                            data:datas,
+                            backgroundColor:[
+                            	'rgba(255, 109, 64, 0.6)',
+                            	'rgba(105, 29, 12, 0.6)',
+                                'rgba(255, 99, 132, 0.6)',
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(255, 206, 86, 0.6)',
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(153, 102, 255, 0.6)',
+                                'rgba(255, 159, 64, 0.6)',
+                                'rgba(255, 99, 132, 0.6)',
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(255, 206, 86, 0.6)',
+                                'rgba(255, 206, 86, 0.6)',
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(153, 102, 255, 0.6)',
+                                'rgba(155, 159, 64, 0.6)',
+                                'rgba(55, 99, 132, 0.6)'
+                                
+                              ],
+                              borderWidth:1,
+                              borderColor:'#777',
+                              hoverBorderWidth:3,
+                              hoverBorderColor:'#000'
+                        }]
+                        },
+                        options: {
+                        	scales:{
+                        		yAxes: [{
+                        			ticks:{
+                        				beginAtZero: true
+                        			}
+                        		}]
+                        	},
+                        	title:{
+                                display:true,
+                                text:'Category Wise Product Sold',
+                                fontSize:25
+                              },
+                              legend:{
+                                display:true,
+                                position:'right',
+                                labels:{
+                                  fontColor:'#000'
+                                }
+                              },
+                              layout:{
+                                padding:{
+                                  left:10,
+                                  right:0,
+                                  bottom:0,
+                                  top:50
+                                }
+                              },
+                              tooltips:{
+                                enabled:true
+                              }
+                            
+                          }
+                    });
+                    
+                 
+                }
+                else if(this.readyState == 4 && this.status == 400)
+                {	
+                    var obj1=JSON.parse(this.responseText);
+                    
+                    
+                    for(i in obj1){
+                        var  x="<table><tr><td>"+obj1[i]+"</td></tr></table>"
+                        document.getElementById('success').innerHTML=x;
+                    }
+                }
+              };
+              xhttp.open("GET", "http://localhost:8080/OrderManagementSystem-Office/home/stock/sell-details", true);
+              xhttp.send();
+            }
+            window.onload=loadDoc();
+        </script>
+	
+	<div class="container">
+        <canvas id="myChart"></canvas>
+    </div>
+
+</body>
+</html>

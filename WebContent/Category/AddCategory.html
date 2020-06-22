@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Category</title>
+<style>
+	#form{
+	width: 400px;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding : 2px;
+	}
+</style>
+</head>
+<script>
+function loadDoc()
+{
+	var id=document.getElementById('cid').value;
+	var category=document.getElementById('name').value;
+	var obj={
+			"categoryId":id,
+			"categoryName":category
+	}
+	
+	var s=JSON.stringify(obj);
+	console.log(s);
+	 var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	    	var obj1=JSON.parse(this.responseText);
+	        var x="<h3>Category Created </h3><br><table border=1><tr><th>Category Id</th><th>Category Name</th></tr>";
+	    	x+="<tr><td>"+obj1.categoryId+"</td><td>"+obj1.categoryName+"</td></tr>";
+	    	x+="</table>";
+	    	document.getElementById('success').innerHTML=x;
+	      
+	    }
+	    else if(this.readyState == 4 && this.status == 400)
+	    {
+	    	var obj1 = JSON.parse(this.responseText);
+	    	var x="<h3>"+obj1.message+"</h3>";
+	    	document.getElementById('success').innerHTML=x;
+	    	
+	   	}
+	    
+	  };
+	  xhttp.open("POST", "http://localhost:8080/OrderManagementSystem-Office/home/category/add-category", true);
+	  xhttp.setRequestHeader("Content-type", "application/json");
+	  xhttp.send(s);
+	
+}
+</script>
+<body>
+<h2 style="text-align:center;">Add Category</h2>
+	<div style="padding-left:35%;">
+	
+	<div id="form">
+	
+	<table style="padding-left:15%;">
+		<tr>
+		<td><h3>Category Id</h3></td>
+		<td><input type="number" placeholder="Category Id" required id="cid"></td>
+		</tr>
+		<tr>
+		<td><h3>Category Name</h3></td>
+		<td><input type="text" placeholder="Category Name" required id="name"></td>
+		</tr>
+		</table>
+		<br>
+		<div style="padding-left: 40%; ">
+		<button onclick="loadDoc()">Submit</button>
+		</div>
+	<div style="padding-left: 10%;">
+		<div id="success">
+		</div>
+	</div>
+	<br><br>
+</div>
+</div>
+</body>
+</html>

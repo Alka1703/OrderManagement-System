@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Modify User</title>
+<style>
+	#form{
+	width: 500px;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding : 2px;
+	}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<script>
+function loadDoc(){
+	var id=document.getElementById('uid').value;
+	var name=document.getElementById('name').value;
+	var email=document.getElementById('email').value;
+	var password=document.getElementById('password').value;
+	var address=document.getElementById('address').value;
+	var phone=document.getElementById('phone').value;
+	var obj={
+			"id":id,
+			"name":name,
+			"email":email,
+			"password":password,
+			"address":address,
+			"phone":phone
+			}
+	var s=JSON.stringify(obj);
+	var lin="http://localhost:8080/OrderManagementSystem-Office/home/users/"+id;
+	$.ajax({
+		type: 'PUT',
+	    url: lin,
+	    contentType:'application/json',
+	    data:s,
+	    success: function(obj1) {
+	        var x ="<h3>User updated successfully</h3><br>";
+	        x+="<table border =1><tr><th>Id</th><th>Name</th><th>Email</th><th>Password</th><th>Address</th><th>Phone</th></tr>";
+	        x+="<tr><td>"+obj1.id+"</td><td>"+obj1.name+"</td><td>"+obj1.email+"</td><td>"+obj1.password+"</td><td>"+obj1.address+"</td><td>"+obj1.phone+"</td></tr>";
+	    	x+="</table>";
+	        document.getElementById('success').innerHTML=x;
+	    },
+	    error:function (xhr, ajaxOptions, thrownError){
+	        switch (xhr.status) {
+	            case 400:
+	            {
+	            	var x="<br><h3>"+xhr.responseJSON.message+"</h3>";
+	            	document.getElementById('success').innerHTML=x;
+	            	 
+	            }
+	                
+	        }
+	    } 
+	
+	});
+}
+</script>
+<body>
+<div style="padding-left:35%;">
+	<h2 style="padding-left :15%;">Modify User</h2>
+	<div id="form">
+	
+	<table style="padding-left:50px;"><tr>
+		<td><h3>User Id</h3></td>
+		<td><input type="text" placeholder="User Id" required id="uid"></td>
+		</tr>
+		<tr>
+		<td><h3>Name</h3></td>
+		<td><input type="text" placeholder="Name" required id="name"></td>
+		</tr>
+		<tr>
+		<td><h3>Email</h3></td>
+		<td><input type="email" placeholder="Email" required id="email"></td>
+		<tr>
+		</tr>
+		<td><h3>Password</h3></td>
+		<td><input type="password" placeholder="Password" required id="password"></td>
+		<tr>
+		</tr>
+		<td><h3>Address</h3></td>
+		<td><input type="text" placeholder="Address" required id="address"></td>
+		<tr>
+		</tr>
+		<td><h3>Phone</h3></td>
+		<td><input type="text" placeholder="Phone" required id="phone"></td>
+		</tr>
+		</table>
+		<br>
+		<div style="padding-left: 40%; ">
+		<button onclick="loadDoc()">Submit</button>
+		</div>
+	<div style="padding-left: 10%;">
+		<div id="success">
+		</div>
+	</div>
+	<br><br>
+</div>
+</body>
+</html>

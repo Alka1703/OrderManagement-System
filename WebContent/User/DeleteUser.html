@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Delete User</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style>
+	#upper{
+	width: 300px;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding : 2px;
+	}
+</style>
+</head>
+<body>
+<script>
+function loadDoc() {
+	var z=document.getElementById('id').value;
+	
+	$.ajax({
+	    url: 'http://localhost:8080/OrderManagementSystem-Office/home/users/'+z,
+	    type: 'DELETE',
+	    success: function(result) {
+	        var x ="<br><h3>User of id "+result.id+" deleted successfully</h3>";
+	        document.getElementById('success').innerHTML=x;
+	    },
+	    error:function (xhr, ajaxOptions, thrownError){
+	        switch (xhr.status) {
+	            case 400:
+	            {
+	            	var x="<br><h3>"+xhr.responseJSON.message+"</h3>";
+	            	document.getElementById('success').innerHTML=x;
+	            	 
+	            }
+	                
+	        }
+	    } 
+	
+	});
+	
+	  
+	}
+</script>
+	<div style="padding-left:35%;">
+		<h2 style="padding-left :10%;">Delete User</h2>
+		<div id="upper" style= "padding-left:20px">
+			<h3>Enter the User Id</h3>
+			<input type="text" placeholder="User Id" required id="id" >
+			<button onclick="loadDoc()">Submit</button>
+			<br><br>
+			<div id="success">
+			</div>
+		</div>
+	</div>
+</body>
+</html>
